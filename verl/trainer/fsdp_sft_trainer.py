@@ -127,6 +127,7 @@ class FSDPSFTTrainer(object):
                                         prompt_dict_keys=config.data.get('prompt_dict_keys', None),
                                         response_key=config.data.response_key,
                                         response_dict_keys=config.data.get('response_dict_keys', None),
+                                        pretemplated=config.data.pretemplated,
                                         max_length=config.data.max_length,
                                         truncation=config.data.truncation)
         self.val_dataset = SFTDataset(parquet_files=config.data.val_files,
@@ -135,6 +136,7 @@ class FSDPSFTTrainer(object):
                                       prompt_dict_keys=config.data.get('prompt_dict_keys', None),
                                       response_key=config.data.response_key,
                                       response_dict_keys=config.data.get('response_dict_keys', None),
+                                      pretemplated=config.data.pretemplated,
                                       max_length=config.data.max_length,
                                       truncation=config.data.truncation)
 
@@ -462,7 +464,6 @@ class FSDPSFTTrainer(object):
         print(f'Total training steps: {self.total_training_steps}')
 
         # TODO (zhangchi.usc1992) add back checkpoint manager. Currently, it blocks when uploading to hdfs. So very slow.
-
         for epoch in range(self.config.trainer.total_epochs):
             self.train_sampler.set_epoch(epoch=epoch)
             for data in tqdm(self.train_dataloader,

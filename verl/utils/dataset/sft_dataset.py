@@ -43,6 +43,7 @@ class SFTDataset(Dataset):
                  prompt_dict_keys=None,
                  response_key='response',
                  response_dict_keys=None,
+                 pretemplated=False,
                  max_length=1024,
                  truncation='error'):
         assert truncation in ['error', 'left', 'right']
@@ -60,6 +61,12 @@ class SFTDataset(Dataset):
         self.response_key = response_key if isinstance(response_key, (tuple, list)) else [response_key]
         self.prompt_dict_keys = [] if not prompt_dict_keys else prompt_dict_keys
         self.response_dict_keys = [] if not response_dict_keys else response_dict_keys
+        self.pretemplated = pretemplated
+        
+        if isinstance(self.prompt_key, list) and len(self.prompt_key) == 1 and not self.prompt_dict_keys:
+            self.prompt_key = self.prompt_key[0]
+        if isinstance(self.response_key, list) and len(self.response_key) == 1 and not self.response_dict_keys:
+            self.response_key = self.response_key[0]
 
         self.max_length = max_length
 
@@ -77,7 +84,6 @@ class SFTDataset(Dataset):
             while isinstance(ls, (pandas.core.series.Series, numpy.ndarray)) and len(ls) == 1:
                 ls = ls[0]
             return ls
-
         dataframes = []
         for parquet_file in self.parquet_files:
             # read parquet files and cache
@@ -114,10 +120,16 @@ class SFTDataset(Dataset):
         response = self.responses[item]
 
         # apply chat template
-        prompt_chat = [{'role': 'user', 'content': prompt}]
+        prompt_chat = [{'role': 'user', 'content': prompt}] if not self.pretemplated else prompt
+        try:
+            prompt_chat = prompt_chat.tolist()
+        except:
+            pass
 
         # string
         prompt_chat_str = tokenizer.apply_chat_template(prompt_chat, add_generation_prompt=True, tokenize=False)
+        if self.pretemplated:
+            response = response[0]['content']
         response_chat_str = response + tokenizer.eos_token
 
         # tokenize

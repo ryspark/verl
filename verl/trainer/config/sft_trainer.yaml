@@ -4,6 +4,7 @@ data:
   micro_batch_size_per_gpu: 4  # this is also val batch size
   train_files: ~/data/gsm8k/train.parquet
   val_files: ~/data/gsm8k/test.parquet
+  pretemplated: false  # prompts/responses come already in oai template 
   prompt_key: question
   response_key: answer
   max_length: 1024

@@ -1,0 +1,176 @@
+
+CondaError: Run 'conda init' before 'conda activate'
+
+W0303 22:02:32.170000 22884332237440 torch/distributed/run.py:779] 
+W0303 22:02:32.170000 22884332237440 torch/distributed/run.py:779] *****************************************
+W0303 22:02:32.170000 22884332237440 torch/distributed/run.py:779] Setting OMP_NUM_THREADS environment variable for each process to be 1 in default, to avoid your system being overloaded, please further tune the variable for optimal performance in your application as needed. 
+W0303 22:02:32.170000 22884332237440 torch/distributed/run.py:779] *****************************************
+/iris/u/rypark/miniconda3/envs/verlc/lib/python3.10/site-packages/vllm/connections.py:8: RuntimeWarning: Failed to read commit hash:
+No module named 'vllm._version'
+  from vllm.version import __version__ as VLLM_VERSION
+/iris/u/rypark/miniconda3/envs/verlc/lib/python3.10/site-packages/vllm/connections.py:8: RuntimeWarning: Failed to read commit hash:
+No module named 'vllm._version'
+  from vllm.version import __version__ as VLLM_VERSION
+/iris/u/rypark/code/verl/verl/utils/tokenizer.py:29: UserWarning: tokenizer.pad_token_id is None. Now set to 128009
+  warnings.warn(f'tokenizer.pad_token_id is None. Now set to {tokenizer.eos_token_id}')
+Normalize batch size by dp 2
+Using sequence parallel size: 1
+Using remove padding: False
+Using FSDP rank 0 and size 2 for data distribution
+/iris/u/rypark/miniconda3/envs/verlc/lib/python3.10/site-packages/torch/utils/data/dataloader.py:557: UserWarning: This DataLoader will create 8 worker processes in total. Our suggested max number of worker in current system is 4, which is smaller than what this DataLoader is going to create. Please be aware that excessive worker creation might get DataLoader running slow or even freeze, lower the worker number to avoid potential slowness/freeze if necessary.
+  warnings.warn(_create_warning_msg(
+/iris/u/rypark/code/verl/verl/utils/tokenizer.py:29: UserWarning: tokenizer.pad_token_id is None. Now set to 128009
+  warnings.warn(f'tokenizer.pad_token_id is None. Now set to {tokenizer.eos_token_id}')
+Flash Attention 2.0 only supports torch.float16 and torch.bfloat16 dtypes, but the current dype in LlamaForCausalLM is torch.float32. You should run training or inference using Automatic Mixed-Precision via the `with torch.autocast(device_type='torch_device'):` decorator, or load the model with the `torch_dtype` argument. Example: `model = AutoModel.from_pretrained("openai/whisper-tiny", attn_implementation="flash_attention_2", torch_dtype=torch.float16)`
+You are attempting to use Flash Attention 2.0 with a model not initialized on GPU. Make sure to move the model to GPU after initializing it on CPU with `model.to('cuda')`.
+Loading checkpoint shards:   0%|          | 0/2 [00:00<?, ?it/s]/iris/u/rypark/miniconda3/envs/verlc/lib/python3.10/site-packages/torch/utils/data/dataloader.py:557: UserWarning: This DataLoader will create 8 worker processes in total. Our suggested max number of worker in current system is 4, which is smaller than what this DataLoader is going to create. Please be aware that excessive worker creation might get DataLoader running slow or even freeze, lower the worker number to avoid potential slowness/freeze if necessary.
+  warnings.warn(_create_warning_msg(
+Flash Attention 2.0 only supports torch.float16 and torch.bfloat16 dtypes, but the current dype in LlamaForCausalLM is torch.float32. You should run training or inference using Automatic Mixed-Precision via the `with torch.autocast(device_type='torch_device'):` decorator, or load the model with the `torch_dtype` argument. Example: `model = AutoModel.from_pretrained("openai/whisper-tiny", attn_implementation="flash_attention_2", torch_dtype=torch.float16)`
+You are attempting to use Flash Attention 2.0 with a model not initialized on GPU. Make sure to move the model to GPU after initializing it on CPU with `model.to('cuda')`.
+Loading checkpoint shards:   0%|          | 0/2 [00:00<?, ?it/s]Loading checkpoint shards:  50%|█████     | 1/2 [00:03<00:03,  3.94s/it]Loading checkpoint shards:  50%|█████     | 1/2 [00:03<00:03,  3.81s/it]Loading checkpoint shards: 100%|██████████| 2/2 [00:05<00:00,  2.40s/it]Loading checkpoint shards: 100%|██████████| 2/2 [00:05<00:00,  2.63s/it]
+Loading checkpoint shards: 100%|██████████| 2/2 [00:05<00:00,  2.32s/it]Loading checkpoint shards: 100%|██████████| 2/2 [00:05<00:00,  2.54s/it]
+functools.partial(<function _or_policy at 0x14c345c4b520>, policies=[functools.partial(<function transformer_auto_wrap_policy at 0x14c345c4b400>, transformer_layer_cls={<class 'transformers.models.llama.modeling_llama.LlamaDecoderLayer'>})])
+NCCL version 2.20.5+cuda12.4
+Total training steps: 103
+Epoch 1/1:   0%|          | 0/103 [00:00<?, ?it/s]Number of steps/epoch 103, number of epochs 1, total number of steps 103
+{'data': {'train_batch_size': 128, 'micro_batch_size': None, 'micro_batch_size_per_gpu': 1, 'train_files': '/iris/u/rypark/code/dense-tool-rewards/data/train.parquet', 'val_files': '/iris/u/rypark/code/dense-tool-rewards/data/test.parquet', 'pretemplated': True, 'prompt_key': 'input', 'response_key': 'output', 'max_length': 4096, 'truncation': 'error', 'balance_dp_token': False, 'chat_template': None}, 'model': {'partial_pretrain': 'meta-llama/Llama-3.2-3B-Instruct', 'fsdp_config': {'wrap_policy': {'min_num_params': 0}, 'cpu_offload': False, 'offload_params': False}, 'external_lib': None, 'enable_gradient_checkpointing': False, 'trust_remote_code': False, 'lora_rank': 0, 'lora_alpha': 16, 'target_modules': 'all-linear', 'use_liger': False}, 'optim': {'lr': 1e-05, 'betas': [0.9, 0.95], 'weight_decay': 0.01, 'warmup_steps_ratio': 0.1, 'clip_grad': 1.0}, 'ulysses_sequence_parallel_size': 1, 'use_remove_padding': False, 'trainer': {'default_local_dir': '/iris/u/rypark/code/dense-tool-rewards/models', 'default_hdfs_dir': None, 'resume_path': None, 'project_name': 'dense-tool-rewards', 'experiment_name': 'llama-3.2-3b-instruct-l1l2', 'total_epochs': 1, 'total_training_steps': None, 'logger': ['console', 'wandb'], 'seed': 1}}
+wandb: Using wandb-core as the SDK backend.  Please refer to https://wandb.me/wandb-core for more information.
+wandb: Currently logged in as: orangese to https://api.wandb.ai. Use `wandb login --relogin` to force relogin
+wandb: Tracking run with wandb version 0.19.7
+wandb: Run data is saved locally in /iris/u/rypark/code/verl/examples/sft/api_bank/wandb/run-20250303_220253-59vaoj4z
+wandb: Run `wandb offline` to turn off syncing.
+wandb: Syncing run llama-3.2-3b-instruct-l1l2
+wandb: ⭐️ View project at https://wandb.ai/orangese/dense-tool-rewards
+wandb: 🚀 View run at https://wandb.ai/orangese/dense-tool-rewards/runs/59vaoj4z
+Using LocalLogger is deprecated. The constructor API will change 
+Total training steps: 103
+Epoch 1/1:   0%|          | 0/103 [00:00<?, ?it/s]/iris/u/rypark/miniconda3/envs/verlc/lib/python3.10/site-packages/torch/utils/data/dataloader.py:557: UserWarning: This DataLoader will create 8 worker processes in total. Our suggested max number of worker in current system is 4, which is smaller than what this DataLoader is going to create. Please be aware that excessive worker creation might get DataLoader running slow or even freeze, lower the worker number to avoid potential slowness/freeze if necessary.
+  warnings.warn(_create_warning_msg(
+step:0 - train/loss:1.036 - train/lr(1e-3):0.001Epoch 1/1:   1%|          | 1/103 [00:52<1:28:29, 52.05s/it]
+Epoch 1/1:   1%|          | 1/103 [00:48<1:22:41, 48.64s/it]step:1 - train/loss:0.979 - train/lr(1e-3):0.002
+Epoch 1/1:   2%|▏         | 2/103 [01:36<1:20:02, 47.55s/it]Epoch 1/1:   2%|▏         | 2/103 [01:33<1:17:40, 46.15s/it]Epoch 1/1:   3%|▎         | 3/103 [02:20<1:16:53, 46.13s/it]step:2 - train/loss:0.948 - train/lr(1e-3):0.003
+Epoch 1/1:   3%|▎         | 3/103 [02:17<1:15:37, 45.37s/it]step:3 - train/loss:0.931 - train/lr(1e-3):0.004Epoch 1/1:   4%|▍         | 4/103 [03:05<1:14:53, 45.39s/it]
+Epoch 1/1:   4%|▍         | 4/103 [03:01<1:14:07, 44.93s/it]step:4 - train/loss:0.805 - train/lr(1e-3):0.005
+Epoch 1/1:   5%|▍         | 5/103 [03:49<1:13:31, 45.01s/it]Epoch 1/1:   5%|▍         | 5/103 [03:46<1:13:02, 44.72s/it]step:5 - train/loss:0.702 - train/lr(1e-3):0.006
+Epoch 1/1:   6%|▌         | 6/103 [04:33<1:12:26, 44.81s/it]Epoch 1/1:   6%|▌         | 6/103 [04:30<1:12:08, 44.62s/it]step:6 - train/loss:0.592 - train/lr(1e-3):0.007
+Epoch 1/1:   7%|▋         | 7/103 [05:18<1:11:27, 44.66s/it]Epoch 1/1:   7%|▋         | 7/103 [05:14<1:11:14, 44.53s/it]step:7 - train/loss:0.528 - train/lr(1e-3):0.008
+Epoch 1/1:   8%|▊         | 8/103 [06:02<1:10:35, 44.58s/it]Epoch 1/1:   8%|▊         | 8/103 [05:59<1:10:26, 44.49s/it]step:8 - train/loss:0.511 - train/lr(1e-3):0.009
+Epoch 1/1:   9%|▊         | 9/103 [06:47<1:09:45, 44.53s/it]Epoch 1/1:   9%|▊         | 9/103 [06:43<1:09:39, 44.46s/it]step:9 - train/loss:0.504 - train/lr(1e-3):0.010
+Epoch 1/1:  10%|▉         | 10/103 [07:31<1:08:57, 44.49s/it]Epoch 1/1:  10%|▉         | 10/103 [07:28<1:08:53, 44.44s/it]step:10 - train/loss:0.455 - train/lr(1e-3):0.010
+Epoch 1/1:  11%|█         | 11/103 [08:15<1:08:07, 44.43s/it]Epoch 1/1:  11%|█         | 11/103 [08:12<1:08:05, 44.41s/it]step:11 - train/loss:0.434 - train/lr(1e-3):0.010Epoch 1/1:  12%|█▏        | 12/103 [09:00<1:07:22, 44.43s/it]
+Epoch 1/1:  12%|█▏        | 12/103 [08:56<1:07:20, 44.41s/it]step:12 - train/loss:0.410 - train/lr(1e-3):0.010
+Epoch 1/1:  13%|█▎        | 13/103 [09:44<1:06:37, 44.42s/it]Epoch 1/1:  13%|█▎        | 13/103 [09:41<1:06:36, 44.40s/it]step:13 - train/loss:0.427 - train/lr(1e-3):0.010
+Epoch 1/1:  14%|█▎        | 14/103 [10:29<1:05:55, 44.44s/it]Epoch 1/1:  14%|█▎        | 14/103 [10:25<1:05:54, 44.43s/it]step:14 - train/loss:0.422 - train/lr(1e-3):0.010
+Epoch 1/1:  15%|█▍        | 15/103 [11:13<1:05:10, 44.44s/it]Epoch 1/1:  15%|█▍        | 15/103 [11:10<1:05:10, 44.43s/it]step:15 - train/loss:0.381 - train/lr(1e-3):0.010Epoch 1/1:  16%|█▌        | 16/103 [11:57<1:04:26, 44.45s/it]
+Epoch 1/1:  16%|█▌        | 16/103 [11:54<1:04:26, 44.44s/it]step:16 - train/loss:0.398 - train/lr(1e-3):0.010
+Epoch 1/1:  17%|█▋        | 17/103 [12:42<1:03:39, 44.41s/it]Epoch 1/1:  17%|█▋        | 17/103 [12:38<1:03:39, 44.41s/it]step:17 - train/loss:0.393 - train/lr(1e-3):0.010
+Epoch 1/1:  17%|█▋        | 18/103 [13:27<1:03:02, 44.49s/it]Epoch 1/1:  17%|█▋        | 18/103 [13:23<1:03:01, 44.49s/it]step:18 - train/loss:0.390 - train/lr(1e-3):0.010Epoch 1/1:  18%|█▊        | 19/103 [14:11<1:02:17, 44.50s/it]
+Epoch 1/1:  18%|█▊        | 19/103 [14:08<1:02:17, 44.50s/it]step:19 - train/loss:0.354 - train/lr(1e-3):0.010
+Epoch 1/1:  19%|█▉        | 20/103 [14:55<1:01:26, 44.41s/it]Epoch 1/1:  19%|█▉        | 20/103 [14:52<1:01:26, 44.41s/it]step:20 - train/loss:0.345 - train/lr(1e-3):0.010
+Epoch 1/1:  20%|██        | 21/103 [15:40<1:00:41, 44.41s/it]Epoch 1/1:  20%|██        | 21/103 [15:36<1:00:41, 44.41s/it]step:21 - train/loss:0.368 - train/lr(1e-3):0.010
+Epoch 1/1:  21%|██▏       | 22/103 [16:24<59:57, 44.41s/it]  Epoch 1/1:  21%|██▏       | 22/103 [16:21<59:57, 44.41s/it]  step:22 - train/loss:0.359 - train/lr(1e-3):0.010
+Epoch 1/1:  22%|██▏       | 23/103 [17:08<59:10, 44.38s/it]Epoch 1/1:  22%|██▏       | 23/103 [17:05<59:10, 44.38s/it]step:23 - train/loss:0.334 - train/lr(1e-3):0.009
+Epoch 1/1:  23%|██▎       | 24/103 [17:53<58:27, 44.40s/it]Epoch 1/1:  23%|██▎       | 24/103 [17:49<58:27, 44.40s/it]step:24 - train/loss:0.332 - train/lr(1e-3):0.009Epoch 1/1:  24%|██▍       | 25/103 [18:37<57:43, 44.40s/it]
+Epoch 1/1:  24%|██▍       | 25/103 [18:34<57:43, 44.40s/it]step:25 - train/loss:0.336 - train/lr(1e-3):0.009
+Epoch 1/1:  25%|██▌       | 26/103 [19:21<56:54, 44.35s/it]Epoch 1/1:  25%|██▌       | 26/103 [19:18<56:54, 44.35s/it]step:26 - train/loss:0.342 - train/lr(1e-3):0.009
+Epoch 1/1:  26%|██▌       | 27/103 [20:06<56:07, 44.31s/it]Epoch 1/1:  26%|██▌       | 27/103 [20:02<56:07, 44.31s/it]step:27 - train/loss:0.299 - train/lr(1e-3):0.009
+Epoch 1/1:  27%|██▋       | 28/103 [20:50<55:26, 44.36s/it]Epoch 1/1:  27%|██▋       | 28/103 [20:47<55:26, 44.36s/it]step:28 - train/loss:0.326 - train/lr(1e-3):0.009
+Epoch 1/1:  28%|██▊       | 29/103 [21:34<54:41, 44.34s/it]Epoch 1/1:  28%|██▊       | 29/103 [21:31<54:41, 44.34s/it]step:29 - train/loss:0.331 - train/lr(1e-3):0.009Epoch 1/1:  29%|██▉       | 30/103 [22:19<53:57, 44.35s/it]
+Epoch 1/1:  29%|██▉       | 30/103 [22:15<53:57, 44.35s/it]step:30 - train/loss:0.326 - train/lr(1e-3):0.009
+Epoch 1/1:  30%|███       | 31/103 [23:03<53:17, 44.41s/it]Epoch 1/1:  30%|███       | 31/103 [23:00<53:17, 44.41s/it]step:31 - train/loss:0.300 - train/lr(1e-3):0.009
+Epoch 1/1:  31%|███       | 32/103 [23:48<52:32, 44.40s/it]Epoch 1/1:  31%|███       | 32/103 [23:44<52:32, 44.40s/it]step:32 - train/loss:0.290 - train/lr(1e-3):0.009
+Epoch 1/1:  32%|███▏      | 33/103 [24:32<51:43, 44.34s/it]Epoch 1/1:  32%|███▏      | 33/103 [24:29<51:43, 44.34s/it]step:33 - train/loss:0.308 - train/lr(1e-3):0.008
+Epoch 1/1:  33%|███▎      | 34/103 [25:16<51:01, 44.38s/it]Epoch 1/1:  33%|███▎      | 34/103 [25:13<51:01, 44.38s/it]step:34 - train/loss:0.295 - train/lr(1e-3):0.008
+Epoch 1/1:  34%|███▍      | 35/103 [26:01<50:21, 44.43s/it]Epoch 1/1:  34%|███▍      | 35/103 [25:58<50:21, 44.43s/it]step:35 - train/loss:0.296 - train/lr(1e-3):0.008
+Epoch 1/1:  35%|███▍      | 36/103 [26:45<49:36, 44.42s/it]Epoch 1/1:  35%|███▍      | 36/103 [26:42<49:36, 44.42s/it]step:36 - train/loss:0.283 - train/lr(1e-3):0.008
+Epoch 1/1:  36%|███▌      | 37/103 [27:30<48:52, 44.43s/it]Epoch 1/1:  36%|███▌      | 37/103 [27:26<48:52, 44.43s/it]step:37 - train/loss:0.291 - train/lr(1e-3):0.008
+Epoch 1/1:  37%|███▋      | 38/103 [28:15<48:13, 44.52s/it]Epoch 1/1:  37%|███▋      | 38/103 [28:11<48:13, 44.52s/it]step:38 - train/loss:0.334 - train/lr(1e-3):0.008
+Epoch 1/1:  38%|███▊      | 39/103 [28:59<47:29, 44.52s/it]Epoch 1/1:  38%|███▊      | 39/103 [28:56<47:29, 44.52s/it]step:39 - train/loss:0.304 - train/lr(1e-3):0.008
+Epoch 1/1:  39%|███▉      | 40/103 [29:43<46:39, 44.44s/it]Epoch 1/1:  39%|███▉      | 40/103 [29:40<46:39, 44.44s/it]Epoch 1/1:  40%|███▉      | 41/103 [30:28<45:55, 44.45s/it]step:40 - train/loss:0.256 - train/lr(1e-3):0.008
+Epoch 1/1:  40%|███▉      | 41/103 [30:24<45:55, 44.45s/it]step:41 - train/loss:0.296 - train/lr(1e-3):0.007
+Epoch 1/1:  41%|████      | 42/103 [31:12<45:12, 44.46s/it]Epoch 1/1:  41%|████      | 42/103 [31:09<45:12, 44.46s/it]step:42 - train/loss:0.315 - train/lr(1e-3):0.007Epoch 1/1:  42%|████▏     | 43/103 [31:57<44:24, 44.41s/it]
+Epoch 1/1:  42%|████▏     | 43/103 [31:53<44:24, 44.41s/it]step:43 - train/loss:0.254 - train/lr(1e-3):0.007
+Epoch 1/1:  43%|████▎     | 44/103 [32:41<43:39, 44.40s/it]Epoch 1/1:  43%|████▎     | 44/103 [32:38<43:39, 44.40s/it]step:44 - train/loss:0.317 - train/lr(1e-3):0.007
+Epoch 1/1:  44%|████▎     | 45/103 [33:26<43:04, 44.55s/it]Epoch 1/1:  44%|████▎     | 45/103 [33:22<43:04, 44.55s/it]step:45 - train/loss:0.282 - train/lr(1e-3):0.007
+Epoch 1/1:  45%|████▍     | 46/103 [34:10<42:21, 44.58s/it]Epoch 1/1:  45%|████▍     | 46/103 [34:07<42:21, 44.58s/it]step:46 - train/loss:0.271 - train/lr(1e-3):0.007
+Epoch 1/1:  46%|████▌     | 47/103 [34:55<41:37, 44.60s/it]Epoch 1/1:  46%|████▌     | 47/103 [34:52<41:37, 44.60s/it]Epoch 1/1:  47%|████▋     | 48/103 [35:40<40:53, 44.61s/it]step:47 - train/loss:0.316 - train/lr(1e-3):0.006
+Epoch 1/1:  47%|████▋     | 48/103 [35:36<40:53, 44.61s/it]step:48 - train/loss:0.277 - train/lr(1e-3):0.006
+Epoch 1/1:  48%|████▊     | 49/103 [36:24<40:10, 44.64s/it]Epoch 1/1:  48%|████▊     | 49/103 [36:21<40:10, 44.64s/it]step:49 - train/loss:0.254 - train/lr(1e-3):0.006
+Epoch 1/1:  49%|████▊     | 50/103 [37:09<39:24, 44.62s/it]Epoch 1/1:  49%|████▊     | 50/103 [37:06<39:24, 44.62s/it]step:50 - train/loss:0.268 - train/lr(1e-3):0.006Epoch 1/1:  50%|████▉     | 51/103 [37:54<38:39, 44.61s/it]
+Epoch 1/1:  50%|████▉     | 51/103 [37:50<38:39, 44.61s/it]step:51 - train/loss:0.285 - train/lr(1e-3):0.006
+Epoch 1/1:  50%|█████     | 52/103 [38:38<37:56, 44.64s/it]Epoch 1/1:  50%|█████     | 52/103 [38:35<37:56, 44.64s/it]step:52 - train/loss:0.274 - train/lr(1e-3):0.006
+Epoch 1/1:  51%|█████▏    | 53/103 [39:23<37:08, 44.57s/it]Epoch 1/1:  51%|█████▏    | 53/103 [39:19<37:08, 44.57s/it]step:53 - train/loss:0.259 - train/lr(1e-3):0.005
+Epoch 1/1:  52%|█████▏    | 54/103 [40:07<36:23, 44.56s/it]Epoch 1/1:  52%|█████▏    | 54/103 [40:04<36:23, 44.56s/it]step:54 - train/loss:0.307 - train/lr(1e-3):0.005
+Epoch 1/1:  53%|█████▎    | 55/103 [40:52<35:36, 44.51s/it]Epoch 1/1:  53%|█████▎    | 55/103 [40:48<35:36, 44.51s/it]step:55 - train/loss:0.242 - train/lr(1e-3):0.005
+Epoch 1/1:  54%|█████▍    | 56/103 [41:36<34:47, 44.41s/it]Epoch 1/1:  54%|█████▍    | 56/103 [41:32<34:47, 44.41s/it]step:56 - train/loss:0.260 - train/lr(1e-3):0.005Epoch 1/1:  55%|█████▌    | 57/103 [42:21<34:09, 44.55s/it]
+Epoch 1/1:  55%|█████▌    | 57/103 [42:17<34:09, 44.55s/it]step:57 - train/loss:0.229 - train/lr(1e-3):0.005
+Epoch 1/1:  56%|█████▋    | 58/103 [43:05<33:22, 44.50s/it]Epoch 1/1:  56%|█████▋    | 58/103 [43:02<33:22, 44.50s/it]step:58 - train/loss:0.228 - train/lr(1e-3):0.005
+Epoch 1/1:  57%|█████▋    | 59/103 [43:49<32:36, 44.46s/it]Epoch 1/1:  57%|█████▋    | 59/103 [43:46<32:36, 44.46s/it]step:59 - train/loss:0.231 - train/lr(1e-3):0.004
+Epoch 1/1:  58%|█████▊    | 60/103 [44:34<31:50, 44.44s/it]Epoch 1/1:  58%|█████▊    | 60/103 [44:30<31:50, 44.44s/it]step:60 - train/loss:0.257 - train/lr(1e-3):0.004
+Epoch 1/1:  59%|█████▉    | 61/103 [45:18<31:06, 44.43s/it]Epoch 1/1:  59%|█████▉    | 61/103 [45:15<31:06, 44.43s/it]step:61 - train/loss:0.255 - train/lr(1e-3):0.004
+Epoch 1/1:  60%|██████    | 62/103 [46:03<30:21, 44.44s/it]Epoch 1/1:  60%|██████    | 62/103 [45:59<30:21, 44.44s/it]step:62 - train/loss:0.226 - train/lr(1e-3):0.004
+Epoch 1/1:  61%|██████    | 63/103 [46:47<29:36, 44.41s/it]Epoch 1/1:  61%|██████    | 63/103 [46:44<29:36, 44.41s/it]step:63 - train/loss:0.236 - train/lr(1e-3):0.004Epoch 1/1:  62%|██████▏   | 64/103 [47:32<28:53, 44.45s/it]
+Epoch 1/1:  62%|██████▏   | 64/103 [47:28<28:53, 44.45s/it]step:64 - train/loss:0.244 - train/lr(1e-3):0.004
+Epoch 1/1:  63%|██████▎   | 65/103 [48:16<28:10, 44.47s/it]Epoch 1/1:  63%|██████▎   | 65/103 [48:13<28:10, 44.47s/it]step:65 - train/loss:0.275 - train/lr(1e-3):0.003
+Epoch 1/1:  64%|██████▍   | 66/103 [49:01<27:27, 44.54s/it]Epoch 1/1:  64%|██████▍   | 66/103 [48:57<27:27, 44.54s/it]step:66 - train/loss:0.275 - train/lr(1e-3):0.003
+Epoch 1/1:  65%|██████▌   | 67/103 [49:45<26:42, 44.51s/it]Epoch 1/1:  65%|██████▌   | 67/103 [49:42<26:42, 44.51s/it]step:67 - train/loss:0.246 - train/lr(1e-3):0.003
+Epoch 1/1:  66%|██████▌   | 68/103 [50:30<25:57, 44.51s/it]Epoch 1/1:  66%|██████▌   | 68/103 [50:26<25:57, 44.51s/it]step:68 - train/loss:0.224 - train/lr(1e-3):0.003
+Epoch 1/1:  67%|██████▋   | 69/103 [51:14<25:15, 44.57s/it]Epoch 1/1:  67%|██████▋   | 69/103 [51:11<25:15, 44.57s/it]step:69 - train/loss:0.231 - train/lr(1e-3):0.003
+Epoch 1/1:  68%|██████▊   | 70/103 [51:59<24:31, 44.59s/it]Epoch 1/1:  68%|██████▊   | 70/103 [51:56<24:31, 44.59s/it]step:70 - train/loss:0.228 - train/lr(1e-3):0.003
+Epoch 1/1:  69%|██████▉   | 71/103 [52:44<23:46, 44.58s/it]Epoch 1/1:  69%|██████▉   | 71/103 [52:40<23:46, 44.58s/it]step:71 - train/loss:0.223 - train/lr(1e-3):0.003
+Epoch 1/1:  70%|██████▉   | 72/103 [53:28<23:00, 44.55s/it]Epoch 1/1:  70%|██████▉   | 72/103 [53:25<23:00, 44.55s/it]step:72 - train/loss:0.233 - train/lr(1e-3):0.002
+Epoch 1/1:  71%|███████   | 73/103 [54:13<22:19, 44.66s/it]Epoch 1/1:  71%|███████   | 73/103 [54:10<22:19, 44.66s/it]step:73 - train/loss:0.241 - train/lr(1e-3):0.002Epoch 1/1:  72%|███████▏  | 74/103 [54:58<21:34, 44.62s/it]
+Epoch 1/1:  72%|███████▏  | 74/103 [54:54<21:34, 44.62s/it]step:74 - train/loss:0.249 - train/lr(1e-3):0.002
+Epoch 1/1:  73%|███████▎  | 75/103 [55:42<20:48, 44.58s/it]Epoch 1/1:  73%|███████▎  | 75/103 [55:39<20:48, 44.58s/it]step:75 - train/loss:0.242 - train/lr(1e-3):0.002
+Epoch 1/1:  74%|███████▍  | 76/103 [56:27<20:04, 44.61s/it]Epoch 1/1:  74%|███████▍  | 76/103 [56:23<20:04, 44.61s/it]step:76 - train/loss:0.227 - train/lr(1e-3):0.002
+Epoch 1/1:  75%|███████▍  | 77/103 [57:11<19:18, 44.57s/it]Epoch 1/1:  75%|███████▍  | 77/103 [57:08<19:18, 44.57s/it]step:77 - train/loss:0.196 - train/lr(1e-3):0.002
+Epoch 1/1:  76%|███████▌  | 78/103 [57:56<18:32, 44.51s/it]Epoch 1/1:  76%|███████▌  | 78/103 [57:52<18:32, 44.51s/it]step:78 - train/loss:0.238 - train/lr(1e-3):0.002
+Epoch 1/1:  77%|███████▋  | 79/103 [58:40<17:48, 44.50s/it]Epoch 1/1:  77%|███████▋  | 79/103 [58:37<17:48, 44.50s/it]step:79 - train/loss:0.237 - train/lr(1e-3):0.001
+Epoch 1/1:  78%|███████▊  | 80/103 [59:25<17:04, 44.54s/it]Epoch 1/1:  78%|███████▊  | 80/103 [59:21<17:04, 44.54s/it]step:80 - train/loss:0.223 - train/lr(1e-3):0.001
+Epoch 1/1:  79%|███████▊  | 81/103 [1:00:06<16:22, 44.65s/it]Epoch 1/1:  79%|███████▊  | 81/103 [1:00:10<16:22, 44.65s/it]step:81 - train/loss:0.218 - train/lr(1e-3):0.001
+Epoch 1/1:  80%|███████▉  | 82/103 [1:00:54<15:36, 44.61s/it]Epoch 1/1:  80%|███████▉  | 82/103 [1:00:51<15:36, 44.61s/it]step:82 - train/loss:0.206 - train/lr(1e-3):0.001
+Epoch 1/1:  81%|████████  | 83/103 [1:01:35<14:50, 44.53s/it]Epoch 1/1:  81%|████████  | 83/103 [1:01:38<14:50, 44.53s/it]step:83 - train/loss:0.203 - train/lr(1e-3):0.001
+Epoch 1/1:  82%|████████▏ | 84/103 [1:02:23<14:05, 44.49s/it]Epoch 1/1:  82%|████████▏ | 84/103 [1:02:19<14:05, 44.49s/it]step:84 - train/loss:0.217 - train/lr(1e-3):0.001
+Epoch 1/1:  83%|████████▎ | 85/103 [1:03:08<13:21, 44.53s/it]Epoch 1/1:  83%|████████▎ | 85/103 [1:03:04<13:21, 44.53s/it]step:85 - train/loss:0.179 - train/lr(1e-3):0.001
+Epoch 1/1:  83%|████████▎ | 86/103 [1:03:52<12:35, 44.46s/it]Epoch 1/1:  83%|████████▎ | 86/103 [1:03:48<12:35, 44.46s/it]Epoch 1/1:  84%|████████▍ | 87/103 [1:04:36<11:50, 44.41s/it]step:86 - train/loss:0.239 - train/lr(1e-3):0.001
+Epoch 1/1:  84%|████████▍ | 87/103 [1:04:33<11:50, 44.41s/it]step:87 - train/loss:0.216 - train/lr(1e-3):0.001
+Epoch 1/1:  85%|████████▌ | 88/103 [1:05:20<11:05, 44.39s/it]Epoch 1/1:  85%|████████▌ | 88/103 [1:05:17<11:05, 44.39s/it]step:88 - train/loss:0.238 - train/lr(1e-3):0.001
+Epoch 1/1:  86%|████████▋ | 89/103 [1:06:05<10:22, 44.45s/it]Epoch 1/1:  86%|████████▋ | 89/103 [1:06:02<10:22, 44.45s/it]step:89 - train/loss:0.222 - train/lr(1e-3):0.000Epoch 1/1:  87%|████████▋ | 90/103 [1:06:49<09:37, 44.45s/it]
+Epoch 1/1:  87%|████████▋ | 90/103 [1:06:46<09:37, 44.45s/it]step:90 - train/loss:0.222 - train/lr(1e-3):0.000
+Epoch 1/1:  88%|████████▊ | 91/103 [1:07:34<08:53, 44.46s/it]Epoch 1/1:  88%|████████▊ | 91/103 [1:07:31<08:53, 44.46s/it]step:91 - train/loss:0.248 - train/lr(1e-3):0.000
+Epoch 1/1:  89%|████████▉ | 92/103 [1:08:19<08:09, 44.49s/it]Epoch 1/1:  89%|████████▉ | 92/103 [1:08:15<08:09, 44.49s/it]step:92 - train/loss:0.227 - train/lr(1e-3):0.000
+Epoch 1/1:  90%|█████████ | 93/103 [1:09:03<07:25, 44.56s/it]Epoch 1/1:  90%|█████████ | 93/103 [1:09:00<07:25, 44.56s/it]step:93 - train/loss:0.248 - train/lr(1e-3):0.000
+Epoch 1/1:  91%|█████████▏| 94/103 [1:09:48<06:40, 44.53s/it]Epoch 1/1:  91%|█████████▏| 94/103 [1:09:44<06:40, 44.53s/it]step:94 - train/loss:0.228 - train/lr(1e-3):0.000Epoch 1/1:  92%|█████████▏| 95/103 [1:10:32<05:55, 44.48s/it]
+Epoch 1/1:  92%|█████████▏| 95/103 [1:10:29<05:55, 44.48s/it]step:95 - train/loss:0.236 - train/lr(1e-3):0.000Epoch 1/1:  93%|█████████▎| 96/103 [1:11:17<05:11, 44.55s/it]
+Epoch 1/1:  93%|█████████▎| 96/103 [1:11:13<05:11, 44.55s/it]step:96 - train/loss:0.208 - train/lr(1e-3):0.000
+Epoch 1/1:  94%|█████████▍| 97/103 [1:12:02<04:27, 44.64s/it]Epoch 1/1:  94%|█████████▍| 97/103 [1:11:58<04:27, 44.64s/it]step:97 - train/loss:0.226 - train/lr(1e-3):0.000
+Epoch 1/1:  95%|█████████▌| 98/103 [1:12:46<03:43, 44.60s/it]Epoch 1/1:  95%|█████████▌| 98/103 [1:12:43<03:43, 44.60s/it]step:98 - train/loss:0.195 - train/lr(1e-3):0.000
+Epoch 1/1:  96%|█████████▌| 99/103 [1:13:31<02:58, 44.55s/it]Epoch 1/1:  96%|█████████▌| 99/103 [1:13:27<02:58, 44.55s/it]step:99 - train/loss:0.212 - train/lr(1e-3):0.000Epoch 1/1:  97%|█████████▋| 100/103 [1:14:15<02:13, 44.52s/it]
+Epoch 1/1:  97%|█████████▋| 100/103 [1:14:12<02:13, 44.52s/it]step:100 - train/loss:0.214 - train/lr(1e-3):0.000
+Epoch 1/1:  98%|█████████▊| 101/103 [1:15:00<01:29, 44.60s/it]Epoch 1/1:  98%|█████████▊| 101/103 [1:14:56<01:29, 44.60s/it]step:101 - train/loss:0.183 - train/lr(1e-3):0.000
+Epoch 1/1:  99%|█████████▉| 102/103 [1:15:44<00:44, 44.51s/it]Epoch 1/1:  99%|█████████▉| 102/103 [1:15:41<00:44, 44.51s/it]step:102 - train/loss:0.210 - train/lr(1e-3):0.000
+step:103 - val/loss:1.629
+/iris/u/rypark/miniconda3/envs/verlc/lib/python3.10/site-packages/torch/distributed/fsdp/fully_sharded_data_parallel.py:689: FutureWarning: FSDP.state_dict_type() and FSDP.set_state_dict_type() are being deprecated. Please use APIs, get_state_dict() and set_state_dict(), which can support different parallelisms, FSDP1, FSDP2, DDP. API doc: https://pytorch.org/docs/stable/distributed.checkpoint.html#torch.distributed.checkpoint.state_dict.get_state_dict .Tutorial: https://pytorch.org/tutorials/recipes/distributed_checkpoint_recipe.html .
+  warnings.warn(
+/iris/u/rypark/miniconda3/envs/verlc/lib/python3.10/site-packages/torch/distributed/fsdp/fully_sharded_data_parallel.py:689: FutureWarning: FSDP.state_dict_type() and FSDP.set_state_dict_type() are being deprecated. Please use APIs, get_state_dict() and set_state_dict(), which can support different parallelisms, FSDP1, FSDP2, DDP. API doc: https://pytorch.org/docs/stable/distributed.checkpoint.html#torch.distributed.checkpoint.state_dict.get_state_dict .Tutorial: https://pytorch.org/tutorials/recipes/distributed_checkpoint_recipe.html .
+  warnings.warn(
+Epoch 1/1:  99%|█████████▉| 102/103 [1:18:09<00:45, 45.98s/it]
+[rank1]:[W303 23:21:01.098529331 ProcessGroupNCCL.cpp:1168] Warning: WARNING: process group has NOT been destroyed before we destruct ProcessGroupNCCL. On normal program exit, the application should call destroy_process_group to ensure that any pending NCCL operations have finished in this process. In rare cases this process can exit before this point and block the progress of another member of the process group. This constraint has always been present,  but this warning has only been added since PyTorch 2.4 (function operator())
+Epoch 1/1:  99%|█████████▉| 102/103 [1:18:07<00:45, 45.95s/it]
+wandb:                                                                                
+wandb: 
+wandb: Run history:
+wandb:     train/loss ██▅▄▃▃▃▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▁▂▁▁▂▂▁▁▁▁▁▁▁▂▁▁▁
+wandb: train/lr(1e-3) ▂▄▅▆▇█████████▇▇▇▆▆▆▅▅▅▄▃▃▃▃▃▂▂▂▂▂▁▁▁▁▁▁
+wandb:       val/loss ▁
+wandb: 
+wandb: Run summary:
+wandb:     train/loss 0.20986
+wandb: train/lr(1e-3) 0
+wandb:       val/loss 1.62864
+wandb: 
+wandb: 🚀 View run llama-3.2-3b-instruct-l1l2 at: https://wandb.ai/orangese/dense-tool-rewards/runs/59vaoj4z
+wandb: ⭐️ View project at: https://wandb.ai/orangese/dense-tool-rewards
+wandb: Synced 5 W&B file(s), 0 media file(s), 0 artifact file(s) and 0 other file(s)
+wandb: Find logs at: ./wandb/run-20250303_220253-59vaoj4z/logs
+[rank0]:[W303 23:21:04.068424910 ProcessGroupNCCL.cpp:1168] Warning: WARNING: process group has NOT been destroyed before we destruct ProcessGroupNCCL. On normal program exit, the application should call destroy_process_group to ensure that any pending NCCL operations have finished in this process. In rare cases this process can exit before this point and block the progress of another member of the process group. This constraint has always been present,  but this warning has only been added since PyTorch 2.4 (function operator())
