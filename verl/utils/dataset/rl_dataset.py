@@ -12,6 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+import re
 from omegaconf import ListConfig
 import os
 from typing import List, Union, Optional, Callable
@@ -86,7 +87,7 @@ class RLHFDataset(Dataset):
                  max_prompt_length: int = 1024,
                  cache_dir: str = '~/.cache/verl/rlhf',
                  chat_template_func: Optional[Callable] = None,
-                 return_raw_chat: bool = False,
+                 return_raw_chat: bool = True,
                  truncation: str = 'error',
                  filter_overlong_prompts: bool = False,
                  num_workers: Optional[int] = None):
@@ -197,7 +198,7 @@ class RLHFDataset(Dataset):
                                                                          tokenizer=self.tokenizer,
                                                                          max_length=self.max_prompt_length,
                                                                          pad_token_id=self.tokenizer.pad_token_id,
-                                                                         left_pad=True,
+                                                                         left_pad=False,
                                                                          truncation=self.truncation)
 
         if is_multi_modal:
@@ -216,14 +217,49 @@ class RLHFDataset(Dataset):
         row_dict['attention_mask'] = attention_mask[0]
         row_dict['position_ids'] = position_ids[0]
         row_dict['raw_prompt_ids'] = self.tokenizer.encode(raw_prompt, add_special_tokens=False)
+        #row_dict['no_template_prompt_ids'] = self.tokenizer.encode(chat, add_special_tokens=False)
 
         # encode prompts without chat template
-        if self.return_raw_chat:
-            row_dict['raw_prompt'] = chat
+        #if self.return_raw_chat:
+        row_dict['raw_prompt'] = chat
+        row_dict['raw_prompt_no_template'] = chat[0]["content"]
 
         # add index for each prompt
         index = row_dict.get("extra_info", {}).get("index", 0)
         row_dict["index"] = index
+
+        # tokenize prompts
+        prompts = row_dict.get("extra_info", {}).get("prompts")
+        special_token = "<|video_pad|>"
+        if prompts is not None:
+            row_dict["prompts"] = {}
+            for key, prompt in prompts.items():
+                if not isinstance(prompt, str):
+                    continue
+
+                """
+                # need to get delimiters so we can track the order of splicing
+                # we actually tokenize a masked version so we can splice generated stuff in later on
+                prompt = [{"content": prompt, "role": "user"}]
+                prompt_with_template = self.tokenizer.apply_chat_template(prompt, add_generation_prompt=True, tokenize=False)
+                delimiters = re.findall(r'\{([^}]*)\}', prompt_with_template)
+                masked_prompt_with_template = re.sub(r'\{[^}]*\}', special_token, prompt_with_template)
+
+                # don't truncate or pad, does the same thing as verl_F's function
+                # tokenize special mask tokens as they are, so we can find them later
+                input_data = self.tokenizer(masked_prompt_with_template, return_tensors="pt", add_special_tokens=False)
+                input_ids, attn_mask = input_data['input_ids'], input_data['attention_mask']
+                row_dict["prompts"][key] = {
+                    "input_ids": input_ids[0],
+                    "attention_mask": attn_mask[0],
+                    "position_ids": compute_position_id_with_mask(attn_mask)[0],
+                    "delimiters": delimiters,
+                    "raw": prompt_with_template
+                }
+                """
+                prompt = [{"content": prompt, "role": "user"}]
+                prompt_with_template = self.tokenizer.apply_chat_template(prompt, add_generation_prompt=True, tokenize=False)
+                row_dict['prompts'][key] = {'raw': prompt_with_template}
 
         return row_dict
 

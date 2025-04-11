@@ -163,9 +163,11 @@ class vLLMRollout(BaseRollout):
         # left-padded attention_mask
         attention_mask = prompts.batch['attention_mask']
         position_ids = prompts.batch['position_ids']
+        print(idx.shape, attention_mask.shape, position_ids.shape)
 
         # used to construct attention_mask
         eos_token_id = prompts.meta_info['eos_token_id']
+        print(eos_token_id)
 
         batch_size = idx.size(0)
 
