@@ -147,7 +147,6 @@ class SFTDataset(Dataset):
         response_length = response_ids.shape[0]
 
         input_ids = torch.cat((prompt_ids, response_ids), dim=-1)
-        print(input_ids)
         attention_mask = torch.cat((prompt_attention_mask, response_attention_mask), dim=-1)
 
         # padding to max length

@@ -853,7 +853,7 @@ class RayPPOTrainer(object):
                 tokenizer=self.tokenizer,
                 max_length=2048,
                 pad_token_id=self.tokenizer.pad_token_id,
-                left_pad=False,
+                left_pad=True,  # 
                 truncation="error"
             )
             position_ids = compute_position_id_with_mask(attention_mask)
@@ -916,7 +916,8 @@ class RayPPOTrainer(object):
                 chains = ["" for _ in range(len(questions))]
                 batch_dict = {k: v for k, v in batch_dict.items() if k not in ('input_ids', 'attention_mask', 'position_ids')}
 
-                for hop in range(8):  # TODO: how many hops?
+                n_hops = 8
+                for hop in range(n_hops):
                     os.system('nvidia-smi')
                     hop_type = next(types_cycle)
                     metrics = {}
@@ -953,6 +954,7 @@ class RayPPOTrainer(object):
                             batch_keys=['input_ids', 'attention_mask', 'position_ids'],
                             non_tensor_batch_keys=['raw_prompt_ids'],
                         )
+                        gen_batch.meta_info['pad_token_id'] = self.tokenizer.pad_token_id
 
                     is_last_step = self.global_steps >= self.total_training_steps
 
@@ -968,6 +970,7 @@ class RayPPOTrainer(object):
                         responses = np.array(responses).reshape(-1, self.config.actor_rollout_ref.rollout.n)
                         inputs = self.tokenizer.batch_decode(new_input_ids, skip_special_tokens=True)
                         outputs = responses[:, 0].tolist()
+                        """
                         print("*" * 80)
                         for inp, out in zip(inputs, outputs):
                             print("="* 80)
@@ -979,20 +982,22 @@ class RayPPOTrainer(object):
                         print("*" * 80)
                         print()
                         print()
+                        """
                         if hop_type == "query":
                             # need to do document retrieval here
                             # don't do decision forced reward for now here, just gradient updates on generate
                             queries = responses[:, 0]  # choose random query
                             docs_pool = [[text['long_text'] for text in retriever(query, k=3)] for query in queries]
-                            print(docs_pool)
                             continue
                         elif hop_type == "generate":
                             # fill in reasoning chains and then do decision-forced rewards later on
                             for i, response in enumerate(responses):
                                 chains[i] = response[0]
-                        print("CONTUNING")
-                        print()
-                        print()
+
+                        # sparse terminal reward implementation
+                        if hop != n_hops - 1:
+                            continue
+                        print(hop, "DOING GRADIENT UPDATE")
 
                         if self.config.algorithm.adv_estimator == AdvantageEstimator.REMAX:
                             with _timer('gen_max', timing_raw):
@@ -1037,10 +1042,9 @@ class RayPPOTrainer(object):
                             with _timer('ref', timing_raw):
                                 ref_log_prob = self.ref_policy_wg.compute_ref_log_prob(batch)
                                 batch = batch.union(ref_log_prob)
-
+                    
                         # compute values
                         if self.use_critic:
-                            print("USING CRITIC")
                             with _timer('values', timing_raw):
                                 values = self.critic_wg.compute_values(batch)
                                 batch = batch.union(values)
@@ -1051,19 +1055,15 @@ class RayPPOTrainer(object):
                             # the results from reward model and rule-based results.
                             if self.use_rm:
                                 # we first compute reward model score
-                                print('uh oh using rm')
                                 reward_tensor = self.rm_wg.compute_rm_score(batch)
                                 batch = batch.union(reward_tensor)
-                                print('done')
 
                             # we combine with rule-based rm
                             reward_extra_infos_dict: dict[str, list]
                             try:
-                                print('using reward function! start')
                                 reward_result = self.reward_fn(batch, return_dict=True)
                                 reward_tensor = reward_result['reward_tensor']
                                 reward_extra_infos_dict = reward_result['reward_extra_info']
-                                print('done using reward function')
                             except Exception as e:
                                 print(f'Error in reward_fn: {e}')
                                 reward_tensor = self.reward_fn(batch)
@@ -1071,7 +1071,6 @@ class RayPPOTrainer(object):
 
                             batch.batch['token_level_scores'] = reward_tensor
 
-                            print(f'{list(reward_extra_infos_dict.keys())=}')
                             if reward_extra_infos_dict:
                                 batch.non_tensor_batch.update({k: np.array(v) for k, v in reward_extra_infos_dict.items()})
 
@@ -1093,8 +1092,9 @@ class RayPPOTrainer(object):
                             decision_batch_dict['position_ids'] = new_pos_ids
                             decision_gen_batch: DataProto = DataProto.from_single_dict(decision_batch_dict)
                             decision_gen_batch = decision_gen_batch.pop(
-                                batch_keys=['input_ids', 'attention_mask', 'position_ids'],
+                                batch_keys=['input_ids', 'attention_mask', 'position_ids']
                             )
+                            decision_gen_batch.meta_info['pad_token_id'] = self.tokenizer.pad_token_id
 
                             # ... generate a batch
                             with _timer('gen', timing_raw):
@@ -1114,9 +1114,6 @@ class RayPPOTrainer(object):
                                 rewards.append(reward)
 
                             print("!!!!!!!!!!!!! DECISION FORCED !!!!!!!!!!!!!!!!!!")
-                            print(self.tokenizer.batch_decode(new_input_ids, skip_special_tokens=True))
-                            print(decisions)
-                            print(batch_dict['reward_model'])
                             print(rewards)
                             print("!!!!!!!!!!!!! DECISION FORCED !!!!!!!!!!!!!!!!!!")
 
@@ -1183,4 +1180,3 @@ class RayPPOTrainer(object):
 
                     progress_bar.update(1)
                     self.global_steps += 1
-                    os.system('nvidia-smi')
